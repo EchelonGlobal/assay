@@ -997,6 +997,7 @@ function fitFig(el,max,min){
     s-=0.5; el.style.fontSize=s+"px";
   }
 }
+function fitStats(){ $$("#pstats .tv").forEach(el=>fitFig(el,16,10)); }
 /* Bitcoin cannot be rounded to whole units — a $147 baseball card is
    0.0023 BTC, and Math.round() would print every small holding as zero.
    Precision scales with magnitude so a duplex reads 2.663 and a card still
@@ -1349,7 +1350,7 @@ function renderBasis(){
     </div>`;
   requestAnimationFrame(()=>{
     $$("#pstats .mfill").forEach(m=>m.style.width=m.dataset.w+"%");
-    $$("#pstats .tv").forEach(el=>fitFig(el,16,10));
+    fitStats();
   });
 }
 
@@ -2348,6 +2349,17 @@ go=function(k){
   _go(k);
   if(k==="markets"){ renderGlobeSeg(); globeStart(); } else globeStop();
 };
+
+/* Fit the figures AGAIN once the fonts actually apply, and again on resize.
+   The first version fitted once inside requestAnimationFrame and settled on
+   15.5px — a size it measured with fallback metrics, because a megabyte and a
+   half of base64 @font-face still parses asynchronously. Inter Tight then
+   arrived, the glyphs got wider, and the figure clipped again with the fit
+   already believing itself finished. Measuring before the font you are going
+   to render in has loaded is measuring the wrong thing. */
+if(document.fonts&&document.fonts.ready) document.fonts.ready.then(fitStats);
+addEventListener("resize",fitStats);
+addEventListener("orientationchange",()=>setTimeout(fitStats,300));
 
 </script>
 </body>
