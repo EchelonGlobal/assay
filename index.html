@@ -461,12 +461,6 @@ body{font-family:var(--ui);color:var(--ink);background:#101018;-webkit-font-smoo
   color:var(--ink3);letter-spacing:.02em}
 #basis b{color:var(--ink2);font-weight:400}
 #basis b.up{color:var(--live)} #basis b.dn{color:var(--sig)}
-#pstats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;margin-top:10px;
-  background:rgba(255,255,255,.08);border-radius:16px;overflow:hidden}
-#pstats div{background:rgba(12,16,32,.75);padding:11px 10px}
-#pstats .k{font-family:var(--mono);font-size:7.5px;letter-spacing:.13em;color:var(--ink4);text-transform:uppercase}
-#pstats .v{font-family:var(--mono);font-size:15px;margin-top:6px;letter-spacing:-.02em}
-#pstats .c2{font-family:var(--mono);font-size:7.5px;color:var(--ink4);margin-top:5px;line-height:1.45}
 .gn{font-family:var(--mono);font-size:9.5px;letter-spacing:.02em;white-space:nowrap}
 .gn.up{color:var(--live)} .gn.dn{color:var(--sig)}
 .stats .up{color:var(--live)} .stats .dn{color:var(--sig)}
@@ -661,9 +655,16 @@ body{font-family:var(--ui);color:var(--ink);background:#101018;-webkit-font-smoo
    version centred a figure inside a radial gauge, which has no edge for
    the eye to line up against — it read as off-centre however correct the
    arithmetic was. A left edge shared by all four lines fixes it
-   structurally instead of by nudging.  */
-#pstats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:12px;
-  background:none;border-radius:0;overflow:visible}
+   structurally instead of by nudging.
+
+   A hairline-divided strip used to live here, and its `#pstats div` rule —
+   one ID, so it outranked every .tile class below — was still painting a
+   background and 11px/10px of padding onto EVERY div inside the tiles: the
+   label, the figure, the caption. The figure had 70px of room inside a 90px
+   box and truncated at $170,9… while scrollWidth cheerfully reported that it
+   fitted. The container had been reset here; the descendant rule had not.
+   A superseded rule is not superseded until it is deleted. */
+#pstats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:12px}
 .tile{padding:13px 12px 12px;border-radius:18px;text-align:left}
 .tile .k{font-family:var(--mono);font-size:8px;letter-spacing:.13em;color:var(--ink3);
   text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -765,7 +766,8 @@ body{font-family:var(--ui);color:var(--ink);background:#101018;-webkit-font-smoo
    strips back by hand, via env(). The simulated chrome does not compete with
    the real chrome — it gives up its space and becomes the inset.
    Keyed on a class rather than @media (display-mode:standalone) so there is
-   ONE copy of these rules; the head script folds both tests into the class. */
+   ONE copy of these rules; the head script folds both tests into the class.
+
    The insets go through custom properties rather than being read inline, for
    two reasons. env() resolves to 0px on anything that has no notch — it is
    not "unset", so the fallback argument never fires and the status bar
@@ -790,6 +792,12 @@ html.standalone #tabs{padding-bottom:calc(10px + var(--sab))}
    under it. */
 @media (max-width:400px){
   .clab{white-space:normal;overflow:visible;font-size:14px;line-height:1.18}
+  /* Same squeeze, different row: in the movers list a yen price like
+     \u00a51,894,833 is twice the width of $12,069, and the delta column does not
+     shrink, so "Fender Stratocaster" is what gives. On the narrowest handsets
+     the row's type steps down rather than the name losing its last syllable. */
+  #mlist .nm{font-size:12.5px!important}
+  #mlist .cap{font-size:8.5px}
 }
 
 @media (hover:none){
@@ -991,9 +999,31 @@ let CUR="USD";
    wrong for either — a fixed font-size is, because it can only ever be right
    for the one currency I happened to be looking at while writing the
    stylesheet. So the figure is fitted to its box after render. */
+/* Comparing scrollWidth with clientWidth was wrong twice over. clientWidth
+   INCLUDES padding, so a box with 10px either side reports 20px more room
+   than the text actually gets. And once text-overflow paints an ellipsis
+   Chrome clamps scrollWidth to the box, so an element you can SEE truncated
+   reports scrollWidth === clientWidth and measures as fitting. Both errors
+   pointed the same way — everything looked fine — which is how a clipped
+   figure survived an overflow audit. So measure the text itself, unclipped,
+   in an off-screen probe carrying the same font and letter-spacing, and
+   compare it against the CONTENT box. */
+const _probe=document.createElement("span");
+_probe.style.cssText="position:fixed;left:-9999px;top:0;white-space:pre;visibility:hidden";
+function textW(el,cs){
+  if(!_probe.parentNode) document.body.appendChild(_probe);
+  _probe.textContent=el.textContent;
+  _probe.style.fontFamily=cs.fontFamily; _probe.style.fontWeight=cs.fontWeight;
+  _probe.style.fontStyle=cs.fontStyle;   _probe.style.fontSize=cs.fontSize;
+  _probe.style.letterSpacing=cs.letterSpacing;
+  return _probe.getBoundingClientRect().width;
+}
+const contentW=(el,cs)=>el.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight);
 function fitFig(el,max,min){
   el.style.fontSize="";
-  for(let s=max; s>min && el.scrollWidth>el.clientWidth+0.5; ){
+  for(let s=max;;){
+    const cs=getComputedStyle(el);
+    if(textW(el,cs)<=contentW(el,cs)||s<=min) return;
     s-=0.5; el.style.fontSize=s+"px";
   }
 }
