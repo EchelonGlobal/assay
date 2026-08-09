@@ -1446,6 +1446,201 @@ html[data-mat="term"] .btn{background:transparent;color:var(--accent);
 .thm button.on{color:var(--ink)}
 .thm button.on i{border-color:var(--accent);
   box-shadow:0 0 0 1px var(--accent),0 0 calc(14px*var(--glow)) var(--accent)}
+/* ═══ INFORMATION ARCHITECTURES ═════════════════════════════════════
+   Five ways to organise the same holdings. The default, `cards`, is the
+   build that already exists and is untouched — the other four render into
+   mount points and the native children of the view are hidden.
+
+   Materials and palettes still apply on top of all five: an architecture
+   decides WHERE things are, a material decides what they are made of. They
+   are orthogonal, which is why the switcher offers both.
+   ═══════════════════════════════════════════════════════════════════ */
+#ia-port,#ia-glob,#ia-alr{display:none}
+html[data-ia="cards"] #ia-port,
+html[data-ia="cards"] #ia-glob,
+html[data-ia="cards"] #ia-alr{display:none!important}
+html:not([data-ia="cards"]) #ia-port,
+html:not([data-ia="cards"]) #ia-glob{display:block}
+html[data-ia="timeline"] #ia-alr{display:block}
+html:not([data-ia="cards"]) #v-portfolio>:not(#ia-port),
+html:not([data-ia="cards"]) #v-markets>:not(#ia-glob),
+html[data-ia="timeline"] #v-alerts>:not(#ia-alr){display:none}
+
+/* ── shared atoms ─────────────────────────────────────────────────── */
+.iak{font-family:var(--mono);font-size:8px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink4);margin:16px 2px 8px}
+.iabig{font-family:var(--display);font-size:30px;font-weight:600;letter-spacing:-.042em;
+  line-height:1;color:var(--ink)}
+.iamid{font-family:var(--mono);font-size:6.5px}
+
+/* ── 1 · LIVING LEDGER ────────────────────────────────────────────
+   One column, labels left, figures right, hairline rules. Nothing is a
+   card. The interval bar on every row is the whole argument: its width is
+   how much we do NOT know, so a row you can trust is a row that is short. */
+.lg-hero{display:flex;align-items:baseline;gap:7px;flex-wrap:wrap;margin-top:8px}
+.lg-hero b{font-family:var(--display);font-size:27px;font-weight:600;letter-spacing:-.042em;
+  line-height:1.05;color:var(--ink)}
+.lg-hero i{font-style:normal;font-size:12px;color:var(--ink3)}
+.lg-band{height:4px;border-radius:2px;margin-top:11px;position:relative;
+  background:rgba(var(--rgb-cyan),.13)}
+.lg-band i{position:absolute;top:0;height:100%;border-radius:2px;background:var(--cyan);
+  box-shadow:0 0 calc(9px*var(--glow)) var(--cyan)}
+.lg-acct{margin-top:15px}
+.lg-r{display:flex;justify-content:space-between;align-items:baseline;padding:5px 0}
+.lg-r span{font-family:var(--mono);font-size:8.5px;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--ink4)}
+.lg-r b{font-family:var(--mono);font-size:12px;font-weight:400;color:var(--ink2)}
+.lg-r.neg b{color:var(--sig)}
+.lg-net{border-top:1px solid rgba(var(--tint),calc(.24*var(--tint-k)));margin-top:5px;padding-top:9px}
+.lg-net span{color:var(--ink2);font-weight:500}
+.lg-net b{font-size:19px;color:var(--ink);letter-spacing:-.03em}
+.lgline{display:block;width:100%;background:0;border:0;padding:9px 2px 8px;cursor:pointer;
+  text-align:left;font:inherit;color:inherit;
+  border-top:1px solid rgba(var(--tint),calc(.055*var(--tint-k)))}
+.lgtop{display:flex;align-items:center;gap:8px}
+.lgnm{flex:1;min-width:0;font-size:13px;color:var(--ink);overflow:hidden;
+  text-overflow:ellipsis;white-space:nowrap}
+.lgiv{width:52px;height:3.4px;border-radius:2px;flex-shrink:0;position:relative;
+  background:rgba(var(--tint),calc(.09*var(--tint-k)))}
+.lgiv i{position:absolute;left:0;top:0;height:100%;border-radius:2px;background:var(--cc)}
+.lgv{font-family:var(--mono);font-size:11px;color:var(--ink2);min-width:62px;text-align:right}
+.lgd{font-family:var(--mono);font-size:9.5px;min-width:46px;text-align:right}
+.lgd.up{color:var(--live)} .lgd.dn{color:var(--sig)}
+.lgact{display:block;font-size:10px;margin-top:5px;color:var(--cyan)}
+.lgact.warn{color:var(--ask)}
+.lgsubs{display:none;padding:2px 0 6px 10px;
+  border-left:1px solid rgba(var(--tint),calc(.08*var(--tint-k)));margin-left:2px}
+.lgline.open+.lgsubs{display:block}
+.lgsub{display:flex;align-items:center;gap:8px;width:100%;background:0;border:0;
+  padding:7px 2px;cursor:pointer;text-align:left;font:inherit;color:inherit}
+.lgsub .lgnm{font-size:12px;color:var(--ink2)}
+.lgsub .lgv{font-size:10px}
+.lgprov{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.lgfoot{font-family:var(--mono);font-size:8px;color:var(--ink4);letter-spacing:.05em;
+  margin-top:14px;line-height:1.7}
+/* the venue ledger — a list first, the planet second */
+.lgv-row{display:flex;align-items:baseline;gap:8px;padding:9px 2px;
+  border-top:1px solid rgba(var(--tint),calc(.055*var(--tint-k)))}
+.lgv-row.clears{box-shadow:inset 2px 0 0 var(--live)}
+.lgv-row .v{flex:1;font-size:12.5px;color:var(--ink2)}
+.lgv-row.clears .v{color:var(--ink)}
+.lgv-row .e{font-family:var(--mono);font-size:10px;color:var(--ink4)}
+.lgv-row .n{font-family:var(--mono);font-size:11.5px;min-width:64px;text-align:right;color:var(--sig)}
+.lgv-row.clears .n{color:var(--live)}
+/* the T-account */
+.tacc{margin-top:12px}
+.tacc .tr{display:flex;justify-content:space-between;padding:6px 0;font-family:var(--mono);
+  font-size:10.5px;color:var(--ink3)}
+.tacc .tr b{font-weight:400;color:var(--ink2)}
+.tacc .tr.debit b{color:var(--sig)}
+.tacc .tr.credit b{color:var(--ink)}
+.tacc .rule{border-top:1px solid rgba(var(--tint),calc(.2*var(--tint-k)));margin:6px 0}
+.tacc .tr.net{font-size:13px;color:var(--ink2)}
+.tacc .tr.net b{font-size:17px;color:var(--live)}
+.tacc .tr.net.bad b{color:var(--sig)}
+
+/* ── 2 · ASSET CONSTELLATION ──────────────────────────────────────
+   Radial, and the radius is not decorative: it is days-to-cash. Node area
+   is value. Halo softness is how well evidenced the mark is. */
+#cstage{position:relative;width:100%;aspect-ratio:1/1.06;margin-top:2px}
+#cstage svg{width:100%;height:100%;display:block;overflow:visible}
+.cring{fill:none;stroke:rgba(var(--tint),calc(.07*var(--tint-k)));stroke-dasharray:2 5}
+.crlab{font-family:var(--mono);font-size:5.6px;fill:var(--ink4);letter-spacing:.1em}
+.cnode{cursor:pointer}
+.cnode .hit{fill:transparent}
+.cnlab{font-family:var(--ui);font-size:6.4px;fill:var(--ink2);text-anchor:middle}
+.cnode.sel .cnlab{fill:var(--ink)}
+.ccore{fill:rgba(var(--rgb-cyan),.06);stroke:rgba(var(--rgb-cyan),.32)}
+.ccorev{font-family:var(--mono);font-size:13px;font-weight:600;fill:var(--ink);text-anchor:middle}
+.ccorek{font-family:var(--mono);font-size:5.4px;fill:var(--ink4);text-anchor:middle;letter-spacing:.16em}
+@keyframes cpulse{0%{r:var(--r0);opacity:.55}100%{r:var(--r1);opacity:0}}
+.cpulse{fill:none;stroke-width:1.2;animation:cpulse 1.4s ease-out}
+.clegend{font-family:var(--mono);font-size:8px;color:var(--ink4);letter-spacing:.06em;
+  line-height:1.8;margin-top:4px}
+#cdrill{margin-top:12px}
+
+/* ── 3 · ORBITAL MARKET ───────────────────────────────────────────
+   The planet is the surface; content rises over it. The collar keeps the
+   personal position on screen even when the world is the subject. */
+#orb{position:relative;margin-top:6px}
+#orb .collar{position:absolute;inset:0;pointer-events:none}
+#orb .collar svg{width:100%;height:100%;overflow:visible}
+.orbtot{text-align:center;margin-top:6px}
+.orbtot b{font-family:var(--mono);font-size:15px;color:var(--ink);letter-spacing:-.02em}
+.orbtot span{display:block;font-family:var(--mono);font-size:7.5px;color:var(--ink4);
+  letter-spacing:.14em;margin-top:4px}
+.orbsheet{margin-top:14px;border-radius:calc(18px*var(--rk));padding:14px 14px 6px;
+  background:var(--sheetbg);border:1px solid var(--panel-line)}
+.orbgrab{width:34px;height:3px;border-radius:2px;margin:0 auto 12px;
+  background:rgba(var(--tint),calc(.22*var(--tint-k)))}
+.orbrow{display:flex;align-items:center;gap:9px;padding:8px 0;
+  border-top:1px solid rgba(var(--tint),calc(.055*var(--tint-k)))}
+.orbrow:first-of-type{border-top:0}
+.orbdot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.orbrow .r{flex:1;font-size:12.5px;color:var(--ink)}
+.orbrow .c{font-family:var(--mono);font-size:8px;color:var(--ink4);letter-spacing:.05em}
+.orbrow .v{font-family:var(--mono);font-size:11px;color:var(--ink2)}
+/* the flight strip: fees consume the line, in order, and the net survives */
+.fstrip{height:9px;border-radius:5px;overflow:hidden;display:flex;margin:10px 0 4px;
+  background:rgba(var(--tint),calc(.07*var(--tint-k)))}
+.fstrip i{height:100%;display:block}
+.fstrip i+i{margin-left:1.5px}
+.flab{display:flex;justify-content:space-between;font-family:var(--mono);font-size:8px;
+  color:var(--ink4);letter-spacing:.06em}
+
+/* ── 4 · SIGNAL TIMELINE ──────────────────────────────────────────
+   One spine. Armed conditions sit ABOVE now as future events, fired ones
+   drop below into history, and scrolling back rewinds the header — the
+   position at the top is just the sum of everything below it. */
+.tlhead{position:sticky;top:0;z-index:6;padding:12px 2px 11px;margin:0 0 2px;
+  background:linear-gradient(180deg,var(--bg0) 72%,transparent);
+  backdrop-filter:blur(calc(12px*var(--bk)));-webkit-backdrop-filter:blur(calc(12px*var(--bk)))}
+.tlhead .k{font-family:var(--mono);font-size:7.5px;letter-spacing:.16em;color:var(--ink4);
+  text-transform:uppercase}
+.tlhead .v{font-family:var(--display);font-size:21px;font-weight:600;letter-spacing:-.035em;
+  color:var(--ink);margin-top:5px;line-height:1.1}
+.tlhead .sub{display:flex;gap:14px;margin-top:6px;font-family:var(--mono);font-size:9px;
+  color:var(--ink3)}
+.tlhead .sub b{font-weight:400;color:var(--ink2)}
+.tlrw{font-family:var(--mono);font-size:7.5px;color:var(--cyan);letter-spacing:.08em;margin-top:6px}
+.tlspine{position:relative;padding-left:22px;margin-top:4px}
+.tlspine::before{content:"";position:absolute;left:5px;top:0;bottom:0;width:1px;
+  background:rgba(var(--tint),calc(.10*var(--tint-k)))}
+.tlnow{display:flex;align-items:center;gap:8px;margin:12px 0 6px -22px}
+.tlnow i{flex:1;height:1px;background:rgba(var(--tint),calc(.18*var(--tint-k)))}
+.tlnow span{font-family:var(--mono);font-size:7.5px;letter-spacing:.2em;color:var(--ink3)}
+.tlev{position:relative;padding:11px 0 13px;cursor:pointer;width:100%;background:0;border:0;
+  text-align:left;font:inherit;color:inherit;display:block}
+.tlev::before{content:"";position:absolute;left:-21px;top:15px;width:7px;height:7px;
+  border-radius:50%;background:var(--ec)}
+.tlev.armed::before{background:transparent;border:1.5px solid var(--ec);width:6px;height:6px}
+.tlev .kind{font-family:var(--mono);font-size:7.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ec)}
+.tlev .when{float:right;font-family:var(--mono);font-size:7.5px;color:var(--ink4)}
+.tlev .what{display:block;font-size:13px;color:var(--ink);margin-top:5px;line-height:1.4}
+.tlev .ev{display:block;font-family:var(--mono);font-size:8.5px;color:var(--ink4);
+  margin-top:4px;letter-spacing:.04em}
+.tlev .foot{display:flex;align-items:center;gap:9px;margin-top:8px}
+.tlev .dl{font-family:var(--mono);font-size:11px;color:var(--ec)}
+.tlev .go{margin-left:auto;font-family:var(--mono);font-size:8px;letter-spacing:.12em;
+  text-transform:uppercase;padding:4px 11px;border-radius:calc(9px*var(--rk));
+  color:var(--ec);box-shadow:inset 0 0 0 1px var(--ec)}
+.tlev .mini{position:absolute;right:0;top:12px;width:34px;height:34px;border-radius:50%;
+  border:1px solid rgba(var(--rgb-cyan),.22);background:var(--globe-sea)}
+.tlarmed{padding-left:22px;position:relative}
+.tlarmed::before{content:"";position:absolute;left:5px;top:2px;bottom:0;width:1px;
+  background:linear-gradient(var(--ask),transparent);opacity:.45}
+
+/* ── the switcher ────────────────────────────────────────────────── */
+.iasw{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-top:11px}
+.iasw button{background:0;border:0;cursor:pointer;padding:0;display:flex;flex-direction:column;
+  align-items:center;gap:5px;font-family:var(--ui);color:var(--ink3);font-size:8.5px}
+.iasw button i{display:block;width:100%;height:26px;border-radius:calc(8px*var(--rk));
+  border:1px solid var(--panel-line);position:relative;overflow:hidden}
+.iasw button.on{color:var(--ink)}
+.iasw button.on i{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.iasw i em{position:absolute;background:currentColor;font-style:normal}
+
 </style>
 </head>
 <body>
@@ -1461,6 +1656,7 @@ html[data-mat="term"] .btn{background:transparent;color:var(--accent);
 
   <!-- PORTFOLIO -->
   <div class="doc on" id="v-portfolio">
+    <div id="ia-port"></div>
     <div id="sum" class="glass">
       <div class="k">My possessions</div>
       <div class="v"><b id="plo">—</b><i>to</i><b id="phi">—</b></div>
@@ -1489,6 +1685,7 @@ html[data-mat="term"] .btn{background:transparent;color:var(--accent);
 
   <!-- MARKETS -->
   <div class="doc" id="v-markets">
+    <div id="ia-glob"></div>
     <div class="ttl">Global</div>
     <!-- currency sits above the globe: it reprices every figure on every
          screen, so it belongs at the top as a global control rather than
@@ -1500,7 +1697,7 @@ html[data-mat="term"] .btn{background:transparent;color:var(--accent);
          reading prices. A screen should carry the controls you use every
          visit; the rest belongs in settings. -->
     <div id="fxrow"></div>
-    <div id="globewrap"><canvas id="globe"></canvas></div>
+    <div id="globehome"><div id="globewrap"><canvas id="globe"></canvas></div></div>
     <div class="seg" id="gseg" style="margin-top:10px"></div>
     <div id="gmovers">
       <div class="seg" id="mseg" style="margin-top:10px"></div>
@@ -1520,6 +1717,7 @@ html[data-mat="term"] .btn{background:transparent;color:var(--accent);
 
   <!-- ALERTS -->
   <div class="doc" id="v-alerts">
+    <div id="ia-alr"></div>
     <div class="ttl">Alerts</div>
     <div class="sub" id="asub">—</div>
     <div id="alist"></div>
@@ -2207,12 +2405,20 @@ function renderPrefs(){
            <span>${l}</span></button>`).join("")}</div>
     </div>
     <div class="glass pref">
+      <div class="pl">Architecture</div>
+      <div class="pd">where things sit — independent of the material above</div>
+      <div class="iasw" id="p-ia">${IAS.map(([k,l])=>
+        `<button data-k="${k}" class="${k===ia?"on":""}" aria-label="${l}">
+           <i>${IAGLYPH[k]}</i><span>${l}</span></button>`).join("")}</div>
+    </div>
+    <div class="glass pref">
       <div class="pl">Globe</div>
       <div class="pd">how the world renders on Global</div>
       <div class="seg" id="p-globe">${GSTYLES.map(([k,l])=>
         `<button data-k="${k}" class="${k===gstyle?"on":""}">${l}</button>`).join("")}</div>
     </div>`;
   $$("#p-theme button").forEach(b=>b.onclick=()=>setLook(b.dataset.k));
+  $$("#p-ia button").forEach(b=>b.onclick=()=>setIA(b.dataset.k));
   $$("#p-globe button").forEach(b=>b.onclick=()=>{
     gstyle=b.dataset.k; renderPrefs();
     if(gCtx) drawGlobe();          // the canvas is unmounted while you are here
@@ -3076,6 +3282,564 @@ if(document.fonts&&document.fonts.ready) document.fonts.ready.then(fitStats);
 addEventListener("resize",fitStats);
 addEventListener("orientationchange",()=>setTimeout(fitStats,300));
 
+/* Each chip is a 3-second drawing of the architecture it selects: stacked
+   blocks, ruled lines, a radial burst, a ringed planet, a spine of dots. */
+const IAGLYPH = {
+  cards:   '<em style="left:4px;right:4px;top:4px;height:6px;border-radius:2px;opacity:.5"></em>'
+          +'<em style="left:4px;right:4px;top:12px;height:6px;border-radius:2px;opacity:.3"></em>'
+          +'<em style="left:4px;right:4px;top:20px;height:4px;border-radius:2px;opacity:.18"></em>',
+  ledger:  '<em style="left:4px;right:4px;top:6px;height:1px;opacity:.5"></em>'
+          +'<em style="left:4px;right:4px;top:12px;height:1px;opacity:.5"></em>'
+          +'<em style="left:4px;right:4px;top:18px;height:1px;opacity:.5"></em>'
+          +'<em style="left:4px;width:9px;top:8px;height:2px;opacity:.9"></em>'
+          +'<em style="left:4px;width:15px;top:14px;height:2px;opacity:.9"></em>',
+  constel: '<em style="left:50%;top:50%;width:7px;height:7px;margin:-3.5px;border-radius:50%;opacity:.9"></em>'
+          +'<em style="left:22%;top:26%;width:4px;height:4px;border-radius:50%;opacity:.6"></em>'
+          +'<em style="left:74%;top:32%;width:5px;height:5px;border-radius:50%;opacity:.6"></em>'
+          +'<em style="left:30%;top:72%;width:3px;height:3px;border-radius:50%;opacity:.5"></em>'
+          +'<em style="left:68%;top:70%;width:6px;height:6px;border-radius:50%;opacity:.5"></em>',
+  orbital: '<em style="left:50%;top:50%;width:15px;height:15px;margin:-7.5px;border-radius:50%;'
+          +'background:none;border:1px solid currentColor;opacity:.75"></em>'
+          +'<em style="left:50%;top:50%;width:23px;height:23px;margin:-11.5px;border-radius:50%;'
+          +'background:none;border:1.5px solid currentColor;opacity:.35;'
+          +'clip-path:polygon(0 0,100% 0,100% 55%,0 55%)"></em>',
+  timeline:'<em style="left:7px;top:3px;bottom:3px;width:1px;opacity:.45"></em>'
+          +'<em style="left:5px;top:6px;width:5px;height:5px;border-radius:50%;opacity:.9"></em>'
+          +'<em style="left:5px;top:14px;width:5px;height:5px;border-radius:50%;opacity:.6"></em>'
+          +'<em style="left:5px;top:22px;width:5px;height:5px;border-radius:50%;opacity:.35"></em>'
+          +'<em style="left:14px;right:4px;top:8px;height:1px;opacity:.4"></em>'
+          +'<em style="left:14px;right:7px;top:16px;height:1px;opacity:.3"></em>'
+};
+
+/* ═══ INFORMATION ARCHITECTURES ═════════════════════════════════════
+   Four alternative organisations of the same holdings, plus the existing
+   card layout as the default. Every one of them reads H[], CLS, ARB and the
+   P_* totals unchanged — nothing here re-computes a valuation, because the
+   point of the exercise is that the DATA is settled and only the spatial
+   organisation is in question.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* Fields the concepts need that the current model does not carry. These are
+   DERIVED here rather than authored so the prototype cannot drift from the
+   real holdings — but they are exactly the fields flagged as blockers, and
+   in production they must come from the data, not from a lookup table. */
+const DTC = {crypto:1, metal:2, card:14, tech:10, instr:21, misc:18, gems:30, vehic:75, prop:180};
+const DEMAND = {prop:["Austin","North America"], vehic:["Los Angeles","North America"],
+                crypto:["—","Global · digital"], metal:["London","Global · digital"],
+                card:["Tokyo","Japan"], gems:["Antwerp","Europe"],
+                instr:["Berlin","Europe"], tech:["—","North America"], misc:["Austin","North America"]};
+const STALE = {live:0, sold:12, ask:3, idx:41};
+H.forEach(h=>{
+  h.dtc  = DTC[h.cls] || 21;
+  h.dem  = DEMAND[h.cls] || ["—","Global · digital"];
+  h.stale = STALE[h.kind] ?? 20;
+});
+
+/* An append-only event log, seeded by replaying what the holdings already
+   imply. Every asset implies a discovery and a valuation; every armed alert
+   implies a future event; every clearing route implies an opportunity. */
+const EVENTS = [];
+(function seedEvents(){
+  const H_ = H.map((h,i)=>({h,i}));
+  const byVal = [...H_].sort((a,b)=>b.h.mid-a.h.mid);
+  const fired = ALERTS.find(a=>a.fired);
+  if(fired) EVENTS.push({t:0, kind:"Alert fired", c:"var(--sig)", i:fired.i,
+    what:`${H[fired.i].n} crossed ${usd(fired.th)}`,
+    ev:`marked at ${usd(H[fired.i].mid)} · re-arms below ${usd(fired.th*.955)}`,
+    d:+1400, when:"09:12", act:true});
+  const mv = byVal.find(x=>x.h.kind==="sold") || byVal[0];
+  EVENTS.push({t:1, kind:"Re-marked", c:"var(--live)", i:mv.i,
+    what:`${mv.h.n} · ${mv.h.count||12} comparables`,
+    ev:`${mv.h.src} · ${mv.h.win}`, d:Math.round(mv.h.mid*.011), when:"today"});
+  const arbOk = ARB.map(a=>({a,m:arbMath(a)})).filter(x=>x.m.net>0)[0];
+  if(arbOk) EVENTS.push({t:2, kind:"Demand shifted", c:"var(--live)",
+    what:`${arbOk.a.sell.v} bid above ${arbOk.a.buy.v}`,
+    ev:`${arbOk.a.n} · net of a ${(arbOk.m.floor).toFixed(1)}% fee floor`,
+    d:Math.round(arbOk.m.net), when:"2 Aug", act:true, arb:ARB.indexOf(arbOk.a), map:true});
+  const gradeable = H_.find(x=>x.h.grade==="RAW");
+  if(gradeable) EVENTS.push({t:3, kind:"Recommended", c:"var(--cyan)", i:gradeable.i,
+    what:`Grade ${gradeable.h.n} → PSA 9`,
+    ev:`fee ${usd(GRADE_FEE+GRADE_SHIP)} · ladder step 8.82×`,
+    d:Math.round(gradeable.h.mid*(8.82-1))-GRADE_FEE-GRADE_SHIP, when:"28 Jul", act:true});
+  const idx = H_.find(x=>x.h.kind==="idx");
+  if(idx) EVENTS.push({t:4, kind:"Valued", c:"var(--idx)", i:idx.i,
+    what:`${idx.h.n} · ${idx.h.src}`, ev:`${idx.h.win} · indexed, never traded`,
+    d:Math.round(idx.h.mid*.008), when:"14 Jul", map:true});
+  const ask = H_.find(x=>x.h.kind==="ask");
+  if(ask) EVENTS.push({t:5, kind:"Discovered", c:"var(--ink3)", i:ask.i,
+    what:`${ask.h.n} added by scan`, ev:`${ask.h.count} active asks · no completed sale`,
+    d:Math.round(ask.h.mid), when:"2 Jul"});
+})();
+
+const ARMED = ALERTS.filter(a=>a.on && !a.fired).map(a=>({
+  i:a.i, what:`${H[a.i].n} goes ${a.dir} ${usd(a.th)}`,
+  ev:`now ${usd(H[a.i].mid)} · ${Math.abs((a.th-H[a.i].mid)/H[a.i].mid*100).toFixed(1)}% away`
+}));
+
+/* ── shared helpers ───────────────────────────────────────────────── */
+/* Setting innerHTML destroys every node inside the container, and two of the
+   architectures put the ONE globe canvas inside theirs. A renderer that wipes
+   its own container must therefore hand the globe back first, or it deletes
+   the canvas it is about to ask for. This cost a debug cycle: the orbital
+   renderer ran twice and the second run ate what the first had borrowed. */
+/* Setting innerHTML destroys every node inside the container, and two of the
+   architectures put the ONE globe canvas inside theirs. Every renderer hands
+   the globe back before it wipes its own container, or it deletes the canvas
+   it is about to ask for. The orbital renderer ran twice and the second run
+   ate what the first had borrowed; this is the fix for that. */
+const byCls = () => CLS.map(([k,label,col,art])=>{
+  const items = H.map((h,i)=>({h,i})).filter(x=>x.h.cls===k);
+  if(!items.length) return null;
+  const val   = items.reduce((a,x)=>a+x.h.mid,0);
+  const basis = items.reduce((a,x)=>a+(x.h.basis||0),0);
+  const gain  = val-basis;
+  // spread is already computed per holding; weight it by value so a category
+  // is as uncertain as the money inside it, not as its worst small item
+  const spread = items.reduce((a,x)=>a+x.h.spread*x.h.mid,0)/(val||1);
+  const dtc = items.reduce((a,x)=>a+x.h.dtc*x.h.mid,0)/(val||1);
+  const stale = Math.max(...items.map(x=>x.h.stale));
+  return {k,label,col,art,items,val,basis,gain,
+          pct: basis? gain/basis*100 : 0, spread, dtc, stale};
+}).filter(Boolean).sort((a,b)=>b.val-a.val);
+
+function actionFor(g){
+  if(g.items.some(x=>x.h.grade==="RAW")){
+    const x = g.items.find(y=>y.h.grade==="RAW");
+    return ["grade → +"+usd(Math.round(x.h.mid*7.82)-GRADE_FEE-GRADE_SHIP), false];
+  }
+  if(g.stale>30) return ["mark is "+g.stale+" days old", true];
+  if(g.items.some(x=>x.h.kind==="ask")) return ["asking only — no completed sale", true];
+  return null;
+}
+
+/* ── 1 · LIVING LEDGER ────────────────────────────────────────────── */
+let lgOpen = null;
+function iaLedgerPortfolio(){
+  iaHomeGlobe();   // hand the canvas back before wiping the container
+  const gs = byCls(), maxSpread = Math.max(.08,...gs.map(g=>g.spread));
+  const lo = P_LO, hi = P_HI, span = P_MAX-P_MIN || 1;
+  const rows = gs.map(g=>{
+    const a = actionFor(g), open = lgOpen===g.k;
+    const w = Math.max(6, Math.round(g.spread/maxSpread*52));
+    const subs = g.items.map(({h,i})=>`
+      <button class="lgsub" data-i="${i}">
+        <span class="lgprov" style="background:${h.kind==="live"?"var(--live)":h.kind==="ask"?"var(--ask)":h.kind==="idx"?"var(--idx)":"var(--cyan)"}"></span>
+        <span class="lgnm">${h.n}</span>
+        <span class="lgiv" style="--cc:${g.col}"><i style="width:${Math.max(6,Math.round(h.spread/maxSpread*52))}px"></i></span>
+        <span class="lgv">${POINTY(h.kind)?usd(h.mark):usd(h.lo)+"–"+usd(h.hi)}</span>
+      </button>`).join("");
+    return `<button class="lgline ${open?"open":""}" data-k="${g.k}">
+        <span class="lgtop">
+          <span class="lgnm">${g.label}</span>
+          <span class="lgiv" style="--cc:${g.col}"><i style="width:${w}px"></i></span>
+          <span class="lgv">${usd(g.val)}</span>
+          <span class="lgd ${g.gain>=0?"up":"dn"}">${pct(g.pct)}</span>
+        </span>
+        ${a?`<span class="lgact ${a[1]?"warn":""}">→ ${a[0]}</span>`:""}
+      </button><div class="lgsubs">${subs}</div>`;
+  }).join("");
+  $("#ia-port").innerHTML = `
+    <div class="iak" style="margin-top:6px">My possessions</div>
+    <div class="lg-hero"><b>${usd(lo)}</b><i>to</i><b>${usd(hi)}</b></div>
+    <div class="lg-band"><i style="left:${(lo-P_MIN)/span*100}%;width:${(hi-lo)/span*100}%"></i></div>
+    <div class="lg-acct">
+      <div class="lg-r"><span>Gross assets</span><b>${usd(P_MID)}</b></div>
+      <div class="lg-r neg"><span>Less debt</span><b>−${usd(P_DEBT)}</b></div>
+      <div class="lg-r lg-net"><span>Net position</span><b>${usd(P_NET)}</b></div>
+      <div class="lg-r"><span>Could be cash by Friday</span><b>${usd(P_CASH)}</b></div>
+    </div>
+    <div class="iak">Composition · ${gs.length} lines</div>
+    ${rows}
+    <div class="lgfoot">Bar width is what is NOT known: the interval between the
+      25th and 75th comparable, as a share of the mark.<br>A short bar is a number you can act on.</div>`;
+  $$("#ia-port .lgline").forEach(b=>b.onclick=()=>{
+    lgOpen = lgOpen===b.dataset.k ? null : b.dataset.k; iaRenderPortfolio();
+  });
+  $$("#ia-port .lgsub").forEach(b=>b.onclick=e=>{e.stopPropagation();openDet(+b.dataset.i)});
+}
+
+function iaLedgerGlobal(){
+  iaHomeGlobe();   // hand the canvas back before wiping the container
+  const rows = ARB.map(a=>({a,m:arbMath(a)})).sort((x,y)=>y.m.net-x.m.net);
+  const clears = rows.filter(r=>r.m.net>0).length;
+  $("#ia-glob").innerHTML = `
+    <div class="ttl">Global</div>
+    <div class="iak" style="margin-top:2px">Where the value is</div>
+    <div style="font-size:13px;color:var(--ink2);margin:6px 2px 12px">
+      ${rows.length} routes priced · <b style="color:var(--ink);font-weight:400">${clears} clears</b></div>
+    ${rows.map(({a,m})=>`
+      <div class="lgv-row ${m.net>0?"clears":""}">
+        <span class="v">${a.sell.v}<span class="e" style="display:block">${a.n}</span></span>
+        <span class="n">${m.net>0?"+":"−"}${usd(Math.abs(m.net))}</span>
+      </div>`).join("")}
+    <div class="lgfoot">Fee floor ${(rows[0].m.floor).toFixed(1)}% — platform, cross-border,
+      FX and freight. A route has to beat it before it is worth your Saturday.</div>
+    <button class="lgline" id="lgglobe" style="margin-top:10px;border-top-color:rgba(var(--tint),calc(.14*var(--tint-k)))">
+      <span class="lgtop"><span class="lgnm" style="color:var(--accent)">▸ Show on the globe</span></span>
+    </button>
+    <div id="lgglobeslot"></div>`;
+  $("#lgglobe").onclick = () => {
+    const slot = $("#lgglobeslot");
+    if(slot.firstChild){ slot.innerHTML=""; globeStop(); return; }
+    slot.appendChild($("#globewrap")); globeStart(); drawGlobe();
+  };
+}
+
+/* ── 2 · ASSET CONSTELLATION ──────────────────────────────────────── */
+let cSel = null;
+function iaConstellation(){
+  iaHomeGlobe();   // hand the canvas back before wiping the container
+  const gs = byCls();
+  const S = 300, cx = S/2, cy = S/2*1.06;
+  /* The outermost ring has to leave room for the biggest node AND its label,
+   or the two largest holdings — which are exactly the ones you most want to
+   see — get clipped by the phone frame. 118 is the largest radius where a
+   22px node plus its caption still lands inside a 300-unit box. */
+  const RINGS = [[1,"cash today",46],[14,"days",74],[45,"weeks",98],[180,"months+",118]];
+  const rFor = d => {                       // piecewise so the rings mean what they say
+    for(let i=0;i<RINGS.length;i++) if(d<=RINGS[i][0]) return RINGS[i][2];
+    return 144;
+  };
+  const maxV = Math.max(...gs.map(g=>g.val));
+  /* Place by RING first, then spread within the ring. The first version put
+     nodes at even angles around the whole circle with a jitter, which made the
+     angle look meaningful when it is not, let big nodes overlap the core, and
+     stacked three labels on top of each other. Liquidity decides the radius;
+     the angle only has to keep neighbours apart. */
+  const ringOf = d => { for(const [lim,,r] of RINGS) if(d<=lim) return r; return 144; };
+  const byRing = {};
+  gs.forEach(g=>{ const r = ringOf(g.dtc); (byRing[r] = byRing[r]||[]).push(g); });
+  const nodes = [];
+  Object.keys(byRing).map(Number).sort((a,b)=>a-b).forEach((r, ri)=>{
+    const list = byRing[r].sort((a,b)=>b.val-a.val);
+    // start each ring at a different angle so rings do not line up radially
+    const start = -90 + ri*37;
+    list.forEach((g,i)=>{
+      const ang = start + i*(360/list.length);
+      const sz = 5 + Math.sqrt(g.val/maxV)*17;
+      nodes.push({...g, ang, r, sz,
+        x: cx + r*Math.cos(ang*Math.PI/180),
+        y: cy + r*Math.sin(ang*Math.PI/180),
+        // label sits further out along the same radius, so it never lands on
+        // the core and never collides with the node it belongs to
+        // caption under the node, clamped into the box: a label that runs off
+        // the edge is worse than a label that is not quite centred
+        lx: Math.min(S-30, Math.max(30, cx + r*Math.cos(ang*Math.PI/180))),
+        ly: cy + r*Math.sin(ang*Math.PI/180) + sz + 11});
+    });
+  });
+  const mover = nodes.reduce((a,b)=>Math.abs(b.gain)>Math.abs(a.gain)?b:a, nodes[0]);
+  $("#ia-port").innerHTML = `
+    <div class="iak" style="margin-top:6px">Household</div>
+    <div id="cstage"><svg viewBox="0 0 ${S} ${S*1.06}">
+      ${RINGS.map(([,lab,r],ri)=>`<circle class="cring" cx="${cx}" cy="${cy}" r="${r}"/>
+         ${ri===0?`<text class="crlab" x="${cx}" y="${cy+r-4}"
+            text-anchor="middle">${lab}</text>`:""}`).join("")}
+      <circle class="ccore" cx="${cx}" cy="${cy}" r="34"/>
+      <text class="ccorev" x="${cx}" y="${cy+1}">${usd(P_NET)}</text>
+      <text class="ccorek" x="${cx}" y="${cy+13}">NET</text>
+      ${nodes.map(n=>`<g class="cnode ${cSel===n.k?"sel":""}" data-k="${n.k}">
+          ${n.k===mover.k?`<circle class="cpulse" cx="${n.x}" cy="${n.y}" r="${n.sz+4}"
+             stroke="${n.col}" style="--r0:${n.sz+4}px;--r1:${n.sz+16}px"/>`:""}
+          <circle cx="${n.x}" cy="${n.y}" r="${n.sz + 3 + n.spread*40}" fill="${n.col}" opacity=".12"/>
+          <circle cx="${n.x}" cy="${n.y}" r="${n.sz}" fill="${n.col}" opacity=".85"/>
+          <circle class="hit" cx="${n.x}" cy="${n.y}" r="${n.sz+13}"/>
+          <text class="cnlab" x="${n.lx.toFixed(1)}" y="${n.ly.toFixed(1)}"
+            text-anchor="middle">${n.label}</text>
+        </g>`).join("")}
+    </svg></div>
+    <div class="clegend">AREA = VALUE&nbsp;&nbsp;·&nbsp;&nbsp;RADIUS = TIME TO CASH<br>
+      HALO = HOW MUCH THE MARK COULD MOVE<br>OUTER RING = MONTHS OR LONGER TO SELL</div>
+    <div id="cdrill"></div>`;
+  $$("#ia-port .cnode").forEach(g=>g.onclick=()=>{
+    cSel = cSel===g.dataset.k ? null : g.dataset.k; iaRenderPortfolio();
+  });
+  const sel = gs.find(g=>g.k===cSel);
+  $("#cdrill").innerHTML = sel ? `
+    <div class="iak">${sel.label} · ${usd(sel.val)} · cash in ~${Math.round(sel.dtc)} days</div>
+    ${sel.items.map(({h,i})=>`<button class="lgsub" data-i="${i}" style="padding:9px 2px">
+        <span class="lgprov" style="background:${sel.col}"></span>
+        <span class="lgnm">${h.n}</span>
+        <span class="lgv">${POINTY(h.kind)?usd(h.mark):usd(h.lo)+"–"+usd(h.hi)}</span>
+      </button>`).join("")}` :
+    `<div class="lgfoot" style="margin-top:2px">Tap a node to open it as a precise list.
+      ${mover.label} moved most this week.</div>`;
+  $$("#cdrill .lgsub").forEach(b=>b.onclick=()=>openDet(+b.dataset.i));
+}
+
+/* ── 3 · ORBITAL MARKET ───────────────────────────────────────────── */
+function iaOrbitalPortfolio(){
+  iaHomeGlobe();   // hand the canvas back before wiping the container
+  const gs = byCls();
+  const regions = {};
+  H.forEach(h=>{ const r = h.dem[1]; regions[r] = (regions[r]||0) + h.mid; });
+  const order = Object.entries(regions).sort((a,b)=>b[1]-a[1]);
+  const RC = {"North America":"var(--idx)","Japan":"var(--cyan)","Europe":"var(--ask)","Global · digital":"var(--live)"};
+  const total = gs.reduce((a,g)=>a+g.val,0);
+  let acc = -90;
+  const arcs = gs.slice(0,5).map(g=>{
+    const span = g.val/total*360, a0 = acc, a1 = acc+span-3; acc += span;
+    const R = 47, C = 50;
+    const p = a => [C + R*Math.cos(a*Math.PI/180), C + R*Math.sin(a*Math.PI/180)];
+    const [x0,y0] = p(a0), [x1,y1] = p(a1);
+    return `<path d="M${x0.toFixed(2)} ${y0.toFixed(2)} A ${R} ${R} 0 ${span>183?1:0} 1 ${x1.toFixed(2)} ${y1.toFixed(2)}"
+      fill="none" stroke="${g.col}" stroke-width="3" stroke-linecap="round" opacity=".9"/>`;
+  }).join("");
+  $("#ia-port").innerHTML = `
+    <div class="iak" style="margin-top:4px">Your position, on the world</div>
+    <div id="orb"><div id="orbslot"></div>
+      <div class="collar"><svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">${arcs}</svg></div>
+    </div>
+    <div class="orbtot"><b>${usd(P_LO)} – ${usd(P_HI)}</b><span>COLLAR = COMPOSITION</span></div>
+    <div class="orbsheet"><div class="orbgrab"></div>
+      <div class="iak" style="margin:0 0 4px">By demand region</div>
+      ${order.map(([r,v])=>`<div class="orbrow">
+          <span class="orbdot" style="background:${RC[r]||"var(--cat-dim)"}"></span>
+          <span class="r">${r}</span><span class="v">${usd(v)}</span></div>`).join("")}
+      <div class="lgfoot">Where a thing would sell, not where it sits.</div>
+    </div>`;
+  $("#orbslot").appendChild($("#globewrap"));
+  globeStart(); drawGlobe();
+}
+
+function iaOrbitalGlobal(){
+  iaHomeGlobe();   // hand the canvas back before wiping the container
+  const rows = ARB.map(a=>({a,m:arbMath(a)})).sort((x,y)=>y.m.net-x.m.net);
+  const best = rows[0], m = best.m, g = Math.max(1,best.a.sell.p);
+  const seg = (v,c)=>`<i style="width:${(v/g*100).toFixed(1)}%;background:${c}"></i>`;
+  $("#ia-glob").innerHTML = `
+    <div class="ttl">Global</div>
+    <div id="orb"><div id="orbslot2"></div></div>
+    <div style="margin-top:14px">
+      <div style="font-size:14px;color:var(--ink)">${best.a.buy.v} → ${best.a.sell.v}</div>
+      <div class="lgfoot" style="margin-top:2px">${best.a.n}</div>
+      <div class="flab" style="margin-top:12px"><span>GROSS PREMIUM</span>
+        <span style="color:var(--ink2)">${usd(best.a.sell.p)}</span></div>
+      <div class="fstrip">
+        ${seg(m.platform,"var(--sig)")}${seg(m.border,"var(--sig)")}
+        ${seg(m.fx,"var(--sig)")}${seg(m.ship,"var(--sig)")}
+        ${seg(Math.max(0,m.net),m.net>0?"var(--live)":"var(--sig)")}
+      </div>
+      <div class="tacc">
+        <div class="tr debit"><span>Platform ${(FEE_PLATFORM*100).toFixed(1)}%</span><b>−${usd(m.platform)}</b></div>
+        <div class="tr debit"><span>Cross-border ${(FEE_BORDER*100).toFixed(2)}%</span><b>−${usd(m.border)}</b></div>
+        <div class="tr debit"><span>FX spread ${(FEE_FX*100).toFixed(1)}%</span><b>−${usd(m.fx)}</b></div>
+        <div class="tr debit"><span>Freight</span><b>−${usd(m.ship)}</b></div>
+        <div class="rule"></div>
+        <div class="tr net ${m.net>0?"":"bad"}"><span>Expected net</span>
+          <b>${m.net>0?"+":"−"}${usd(Math.abs(m.net))}</b></div>
+      </div>
+      <div class="lgfoot">${m.pct.toFixed(1)}% on cost · fee floor ${m.floor.toFixed(1)}%<br>
+        ${rows.length-rows.filter(r=>r.m.net>0).length} of ${rows.length} routes do not clear and are drawn unlit.</div>
+    </div>`;
+  $("#orbslot2").appendChild($("#globewrap"));
+  globeStart(); drawGlobe();
+}
+
+/* ── 4 · SIGNAL TIMELINE ──────────────────────────────────────────── */
+function evHTML(e, armed){
+  return `<button class="tlev ${armed?"armed":""}" style="--ec:${armed?"var(--ask)":e.c}"
+      data-i="${e.i??""}" data-arb="${e.arb??""}">
+      <span class="when">${armed?"armed":e.when}</span>
+      <span class="kind">${armed?"Condition":e.kind}</span>
+      <span class="what">${e.what}</span>
+      <span class="ev">${e.ev}</span>
+      ${e.map?'<span class="mini"></span>':""}
+      ${armed?"":`<span class="foot"><span class="dl">${e.d>=0?"+":"−"}${usd(Math.abs(e.d))}</span>
+        ${e.act?'<span class="go">Act</span>':""}</span>`}
+    </button>`;
+}
+function iaTimelinePortfolio(){
+  iaHomeGlobe();   // hand the canvas back before wiping the container
+  $("#ia-port").innerHTML = `
+    <div class="tlhead" id="tlhead">
+      <div class="k">Position · <span id="tlwhen">today</span></div>
+      <div class="v" id="tlv">${usd(P_LO)} – ${usd(P_HI)}</div>
+      <div class="sub"><span>NET <b id="tlnet">${usd(P_NET)}</b></span>
+        <span>LIQUID <b>${usd(P_CASH)}</b></span></div>
+      <div class="tlrw">↑ scroll back — this header rewinds</div>
+    </div>
+    <div class="tlarmed">
+      <div class="iak" style="margin:8px 0 2px;color:var(--ask)">Armed · ${ARMED.length} conditions</div>
+      ${ARMED.map(a=>evHTML(a,true)).join("")}
+    </div>
+    <div class="tlnow"><span>NOW</span><i></i></div>
+    <div class="tlspine">${EVENTS.map(e=>evHTML(e,false)).join("")}</div>
+    <div class="lgfoot" style="padding-left:22px">Every change carries its cause and the evidence
+      behind it. When nothing happened, the spine is empty — that is the normal state.</div>`;
+  $$("#ia-port .tlev").forEach(b=>b.onclick=()=>{
+    if(b.dataset.arb!=="" && b.dataset.arb!=="undefined"){ go("markets"); return; }
+    if(b.dataset.i!=="" && b.dataset.i!=="undefined") openDet(+b.dataset.i);
+  });
+  tlBindScroll();
+}
+/* The header is the sum of everything below it, so scrolling past an event
+   should un-count it. This is the concept's whole argument and it has to be
+   real to be judged. */
+let tlScrollBound = null;
+function tlBindScroll(){
+  const doc = $("#v-portfolio");
+  if(tlScrollBound) doc.removeEventListener("scroll", tlScrollBound);
+  tlScrollBound = () => {
+    if(document.documentElement.dataset.ia!=="timeline") return;
+    const evs = $$("#ia-port .tlspine .tlev"), top = doc.getBoundingClientRect().top + 96;
+    let undo = 0, when = "today";
+    evs.forEach((el,n)=>{
+      if(el.getBoundingClientRect().top < top){ undo += EVENTS[n].d; when = EVENTS[n].when; }
+    });
+    const net = P_NET - undo, k = net/P_NET;
+    $("#tlnet").textContent = usd(net);
+    $("#tlv").textContent = `${usd(P_LO*k)} – ${usd(P_HI*k)}`;
+    $("#tlwhen").textContent = undo ? "as of " + when : "today";
+    $("#tlhead").style.opacity = undo ? .93 : 1;
+  };
+  doc.addEventListener("scroll", tlScrollBound, {passive:true});
+}
+function iaTimelineAlerts(){
+  iaHomeGlobe();   // hand the canvas back before wiping the container
+  $("#ia-alr").innerHTML = `
+    <div class="ttl">Signals</div>
+    <div class="tlarmed">
+      <div class="iak" style="margin:10px 0 2px;color:var(--ask)">Armed · will fire</div>
+      ${ARMED.map(a=>evHTML(a,true)).join("")}
+    </div>
+    <div class="tlnow"><span>NOW</span><i></i></div>
+    <div class="tlspine">${EVENTS.filter(e=>e.act||e.kind==="Alert fired").map(e=>evHTML(e,false)).join("")}</div>
+    <div class="lgfoot" style="padding-left:22px">One axis for what will happen and what did.
+      A rule and its outcome are the same object seen at two times.</div>`;
+  $$("#ia-alr .tlev").forEach(b=>b.onclick=()=>{
+    if(b.dataset.i!=="" && b.dataset.i!=="undefined") openDet(+b.dataset.i);
+  });
+}
+
+
+/* ── Constellation, geographic projection ─────────────────────────
+   The concept's best moment: the SAME nodes, repositioned by where their
+   demand is instead of by how fast they turn into cash. Drawn onto the globe
+   canvas rather than as an overlay, because an HTML overlay cannot rotate
+   with the planet and the whole point is that these are the same objects
+   seen through a different mapping. */
+const CITY = {"Austin":[30.3,-97.7],"Los Angeles":[34.1,-118.2],"Tokyo":[35.7,139.7],
+              "London":[51.5,-0.1],"Antwerp":[51.2,4.4],"Berlin":[52.5,13.4]};
+function iaDrawConstelNodes(){
+  if(!gCtx || ia!=="constel" || view!=="markets") return;
+  const c = gCtx, w = gCanvas.width/(window.devicePixelRatio||1),
+        h = gCanvas.height/(window.devicePixelRatio||1);
+  if(w<40||h<40) return;
+  const cx=w/2, cy=h/2, R=Math.min(w,h)/2-14;
+  const gs = byCls(), maxV = Math.max(...gs.map(g=>g.val));
+  gs.forEach(g=>{
+    const city = (DEMAND[g.k]||[])[0], ll = CITY[city];
+    if(!ll) return;                                   // digital assets have no place
+    const p = gproj(ll[0], ll[1], gRot, R, cx, cy);
+    if(p.z<=0) return;                                // on the far side
+    const sz = 3 + Math.sqrt(g.val/maxV)*11;
+    c.beginPath(); c.arc(p.x,p.y,sz+4,0,7);
+    c.fillStyle = g.col; c.globalAlpha=.16; c.fill(); c.globalAlpha=1;
+    c.beginPath(); c.arc(p.x,p.y,sz,0,7);
+    c.fillStyle = g.col; c.fill();
+  });
+}
+function iaConstelGlobal(){
+  iaHomeGlobe();
+  const gs = byCls();
+  const rows = gs.map(g=>({g, city:(DEMAND[g.k]||["—"])[0]}))
+                 .sort((a,b)=>b.g.val-a.g.val);
+  $("#ia-glob").innerHTML = `
+    <div class="ttl">Global</div>
+    <div class="iak" style="margin-top:2px">Same nodes, geographic projection</div>
+    <div id="orb"><div id="orbslot3"></div></div>
+    <div class="iak">Demand centres</div>
+    ${rows.map(({g,city})=>`<div class="orbrow">
+        <span class="orbdot" style="background:${g.col}"></span>
+        <span class="r">${city}<span class="c" style="display:block">${g.label}</span></span>
+        <span class="v">${usd(g.val)}</span></div>`).join("")}
+    <div class="lgfoot">Radius meant time-to-cash on the portfolio screen.
+      Here the same nodes are placed by where the demand for them is.
+      Nothing digital appears — it has no geography.</div>`;
+  $("#orbslot3").appendChild($("#globewrap"));
+  globeStart(); drawGlobe();
+}
+
+/* ── Timeline, world lane ─────────────────────────────────────────
+   Geography per event, at the size the event deserves, instead of one large
+   globe that every event has to share. */
+function iaTimelineGlobal(){
+  iaHomeGlobe();
+  const rows = ARB.map(a=>({a,m:arbMath(a)})).sort((x,y)=>y.m.net-x.m.net).slice(0,5);
+  $("#ia-glob").innerHTML = `
+    <div class="ttl">Global</div>
+    <div class="iak" style="margin-top:2px">World lane · events that moved you</div>
+    <div class="tlspine" style="margin-top:8px">
+    ${rows.map(({a,m})=>{
+      const good = m.net>0, col = good?"var(--live)":"var(--sig)";
+      return `<button class="tlev" style="--ec:${col}">
+        <span class="when">${a.sell.v.split(" ")[0]}</span>
+        <span class="kind">${good?"Demand shifted":"No route"}</span>
+        <span class="what">${a.n}</span>
+        <span class="ev">${a.buy.v} → ${a.sell.v} · ${m.floor.toFixed(1)}% fee floor</span>
+        <span class="mini"></span>
+        <span class="foot"><span class="dl">${good?"+":"−"}${usd(Math.abs(m.net))}</span>
+          ${good?'<span class="go">Act</span>':""}</span>
+      </button>`;}).join("")}
+    </div>
+    <div class="lgfoot" style="padding-left:22px">
+      ${rows.filter(r=>r.m.net<=0).length} of these are drawn and stay quiet —
+      they do not clear the fee floor. The lane is empty when nothing happened.</div>`;
+}
+
+/* ── the switcher ─────────────────────────────────────────────────── */
+const IAS = [
+  ["cards",    "Cards",   ()=>{}, ()=>{}],
+  ["ledger",   "Ledger",  iaLedgerPortfolio,      iaLedgerGlobal],
+  ["constel",  "Nodes",   iaConstellation,        iaConstelGlobal],
+  ["orbital",  "Orbital", iaOrbitalPortfolio,     iaOrbitalGlobal],
+  ["timeline", "Signals", iaTimelinePortfolio,    iaTimelineGlobal],
+];
+let ia = "cards";
+const iaDef = () => IAS.find(x=>x[0]===ia) || IAS[0];
+function iaRenderPortfolio(){ if(ia!=="cards") iaDef()[2](); }
+function iaRenderGlobal(){    if(ia!=="cards") iaDef()[3](); }
+
+/* The globe is ONE canvas with one 2d context, so the architectures that
+   want it move the node rather than making a second one — a second canvas
+   would mean a second rotation loop and two planets drifting out of phase. */
+function iaHomeGlobe(){
+  const wrap = $("#globewrap");
+  if(wrap && wrap.parentElement && wrap.parentElement.id!=="globehome")
+    $("#globehome").appendChild(wrap);
+}
+function setIA(k){
+  ia = k;
+  iaHomeGlobe();
+  document.documentElement.dataset.ia = k;
+  lgOpen = null; cSel = null;
+  renderPortfolio();          // the hook renders the architecture; calling
+                              // iaRenderPortfolio() again here would be a second
+                              // pass that wipes what the first one just mounted
+  if(view==="markets") renderGlobal();
+  if(view==="alerts")  renderAlerts();
+  renderProfile();
+  if(ia!=="orbital" && view!=="markets") globeStop();
+  requestAnimationFrame(fitStats);
+}
+
+/* ── hooks ────────────────────────────────────────────────────────── */
+const _iaRP = renderPortfolio;
+renderPortfolio = function(){ _iaRP.apply(this, arguments); iaRenderPortfolio(); };
+const _iaRG = renderGlobal;
+renderGlobal = function(){ _iaRG.apply(this, arguments); iaRenderGlobal(); };
+const _iaRA = renderAlerts;
+renderAlerts = function(){ _iaRA.apply(this, arguments); if(ia==="timeline") iaTimelineAlerts(); };
+const _iaGO = go;
+go = function(k){
+  if(!(ia==="orbital" && (k==="markets"||k==="portfolio"))) iaHomeGlobe();
+  _iaGO(k);
+  if(ia==="orbital" && k==="portfolio"){ iaRenderPortfolio(); }
+};
+
+const _iaDG = drawGlobe;
+drawGlobe = function(){ _iaDG.apply(this, arguments); iaDrawConstelNodes(); };
 </script>
 </body>
 </html>
